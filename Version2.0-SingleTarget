@@ -1,0 +1,61 @@
+##dPCR Data back calculation Pipeline Single Plex##13Sept2022
+
+## File path in, current location of the .csv file
+FilePathIn <-"C:/.csv"
+
+##File Path out, include desired file name with .csv designation
+FilePathOut <-"C:/.csv"
+
+#Experimental Parameters in uL
+dPCRPrepVolume = 10
+NucleicAcidVol = 5
+NucleicAcidExtracVol = 80
+##Sample in mL
+SampleExtracVol = 35
+
+##Enter all parameters, hit control+a to select entire window, then click Run
+
+#####################################
+#####################################
+##Variable names coded for ease of use
+b <-dPCRPrepVolume
+c <-NucleicAcidVol
+d <-NucleicAcidExtracVol
+e <-SampleExtracVol
+x <-FilePathIn
+y <-FilePathOut
+
+##Pull Data into environment
+rawdata=read.csv(file=x)
+##Create Function in environment
+testfunc <- function(z,b,c,d,e) {
+  testfunc <- (((z*((b*d)/(c*e)))))
+  return(testfunc)
+}
+
+##Execute function in environment
+#Results <- testfunc(rawdata$##NAME OF dPCR Output Column##,a,b,c)
+results <- testfunc(rawdata$Conc..cp.uL,b,c,d,e)
+formattedresults<-format(results, scientific = FALSE)
+"FinalConc-cp/ml"<- formattedresults
+unformattedresults <-(results*(1000))
+"FinalConc-cp/L"<-unformattedresults
+
+##Create and print output table
+#Final<-data.frame(rawdata$SpeciemenNameColumn,rawdata$NameofOutputColumn,Results)
+output=cbind(rawdata,`FinalConc-cp/ml`,`FinalConc-cp/L`)
+
+##Summary statistics##
+##If it's only ever 14 chambers, I can manually pair them up
+
+#Check for those will less than 3 wells (in positives column) here
+QualityCheck<-ifelse(output$Positives >= 3 & output$Total >= 20000 & output$'FinalConc-cp/L' >= 1000,"Pass","Fail")
+outputqc=cbind(output,QualityCheck)
+
+##Save data to Specified out
+write.csv(outputqc,file= y,row.names=FALSE)
+
+#make it nice # Shouldn't need this for a singleplex but this does work#
+##arranged=arrange(outputqc,Name)
+
+
