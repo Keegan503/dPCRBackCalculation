@@ -1,10 +1,10 @@
 ##dPCR Data back calculation Pipeline 4-Plex##
 
 ## File path in, current location of the .csv file
-FilePathIn <-"C:/Users/15079/Downloads/SARS-CoV-2-9.9.22-Quantification.csv"
+FilePathIn <-"C:/Users/15079/Downloads/.csv"
 
 ##File Path out, include desired file name with .csv designation
-FilePathOut <-"C:/Users/15079/Documents/SarsMungingTest2.csv"
+FilePathOut <-"C:/Users/15079/Documents/.csv"
 
 #Experimental Parameters in uL
 dPCRPrepVolume = 10
